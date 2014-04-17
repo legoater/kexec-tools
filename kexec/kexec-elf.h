@@ -133,5 +133,6 @@ unsigned long elf_max_addr(const struct mem_ehdr *ehdr);
 extern int machine_verify_elf_rel(struct mem_ehdr *ehdr);
 extern void machine_apply_elf_rel(struct mem_ehdr *ehdr, unsigned long r_type, 
 	void *location, unsigned long address, unsigned long value);
+extern int machine_check_elf_phdr_interp(const struct mem_ehdr *ehdr);
 #endif /* KEXEC_ELF_H */
 

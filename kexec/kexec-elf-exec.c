@@ -33,6 +33,10 @@ int build_elf_exec_info(const char *buf, off_t len, struct mem_ehdr *ehdr,
 		fprintf(stderr, "No ELF program header\n");
 		return -1; 
 	}
+
+	if (!machine_check_elf_phdr_interp(ehdr))
+		return 0;
+
 	end_phdr = &ehdr->e_phdr[ehdr->e_phnum];
 	for(phdr = ehdr->e_phdr; phdr != end_phdr; phdr++) {
 		/* Kexec does not support loading interpreters.

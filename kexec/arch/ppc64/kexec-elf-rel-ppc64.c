@@ -5,6 +5,22 @@
 #include "../../kexec-elf.h"
 #include "kexec-ppc64.h"
 
+/* The zImage boot wrapper on 64bit little endian is linked as a
+ * position independant executable and has a interp program
+ * header. We don't want to check for it.
+ */
+int machine_check_elf_phdr_interp(const struct mem_ehdr *ehdr)
+{
+	if (ehdr->ei_data == ELFDATA2MSB)
+		return 1;
+
+	/* sections are loaded in build_elf_info */
+	if (elf_rel_find_section(ehdr, ".kernel:vmlinux.strip"))
+		return 0;
+
+	return 1;
+}
+
 int machine_verify_elf_rel(struct mem_ehdr *ehdr)
 {
 	if (ehdr->ei_class != ELFCLASS64) {

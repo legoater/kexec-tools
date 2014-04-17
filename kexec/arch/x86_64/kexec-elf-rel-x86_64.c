@@ -3,6 +3,11 @@
 #include "../../kexec.h"
 #include "../../kexec-elf.h"
 
+int machine_check_elf_phdr_interp(const struct mem_ehdr *ehdr)
+{
+	return 1;
+}
+
 int machine_verify_elf_rel(struct mem_ehdr *ehdr)
 {
 	if (ehdr->ei_data != ELFDATA2LSB) {

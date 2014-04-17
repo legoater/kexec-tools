@@ -32,6 +32,11 @@
 
 #define MAX_LTOFF       ((uint64_t) (1 << 22))
 
+int machine_check_elf_phdr_interp(const struct mem_ehdr *ehdr)
+{
+	return 1;
+}
+
 int machine_verify_elf_rel(struct mem_ehdr *ehdr)
 {
 	if (ehdr->ei_data != ELFDATA2LSB) {
