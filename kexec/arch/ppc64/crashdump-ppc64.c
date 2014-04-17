@@ -184,7 +184,7 @@ static int get_crash_memory_ranges(struct memory_range **range, int *ranges)
 	DIR *dir, *dmem;
 	FILE *file;
 	struct dirent *dentry, *mentry;
-	int i, n, crash_rng_len = 0;
+	int n, crash_rng_len = 0;
 	unsigned long long start, end;
 	int page_size;
 
