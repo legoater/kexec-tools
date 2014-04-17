@@ -435,6 +435,23 @@ void elf_rel_build_load(struct kexec_info *info, struct mem_ehdr *ehdr,
 	}
 }
 
+struct mem_shdr *elf_rel_find_section(const struct mem_ehdr *ehdr,
+				      const char *name)
+{
+	struct mem_shdr *shdr, *shdr_end;
+	unsigned char *strtab;
+
+	strtab = (unsigned char *)ehdr->e_shdr[ehdr->e_shstrndx].sh_data;
+	shdr_end = &ehdr->e_shdr[ehdr->e_shnum];
+	for (shdr = ehdr->e_shdr; shdr != shdr_end; shdr++) {
+		if (shdr->sh_size &&
+		    strcmp((char *)&strtab[shdr->sh_name], name) == 0) {
+			return shdr;
+		}
+	}
+	return NULL;
+}
+
 int elf_rel_find_symbol(struct mem_ehdr *ehdr,
 	const char *name, struct mem_sym *ret_sym)
 {

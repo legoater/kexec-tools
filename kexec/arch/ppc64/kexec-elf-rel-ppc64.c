@@ -17,23 +17,6 @@ int machine_verify_elf_rel(struct mem_ehdr *ehdr)
 	return 1;
 }
 
-static struct mem_shdr *toc_section(const struct mem_ehdr *ehdr)
-{
-	struct mem_shdr *shdr, *shdr_end;
-	unsigned char *strtab;
-
-	strtab = (unsigned char *)ehdr->e_shdr[ehdr->e_shstrndx].sh_data;
-	shdr_end = &ehdr->e_shdr[ehdr->e_shnum];
-	for (shdr = ehdr->e_shdr; shdr != shdr_end; shdr++) {
-		if (shdr->sh_size &&
-			strcmp((char *)&strtab[shdr->sh_name], ".toc") == 0) {
-			return shdr;
-		}
-	}
-
-	return NULL;
-}
-
 /* r2 is the TOC pointer: it actually points 0x8000 into the TOC (this
    gives the value maximum span in an instruction which uses a signed
    offset) */
@@ -41,7 +24,7 @@ unsigned long my_r2(const struct mem_ehdr *ehdr)
 {
 	struct mem_shdr *shdr;
 
-	shdr = toc_section(ehdr);
+	shdr = elf_rel_find_section(ehdr, ".toc");
 	if (!shdr) {
 		die("TOC reloc without a toc section?");
 	}

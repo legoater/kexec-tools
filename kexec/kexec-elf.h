@@ -109,6 +109,8 @@ extern void elf_rel_build_load(struct kexec_info *info, struct mem_ehdr *ehdr,
 	const char *buf, off_t len, unsigned long min, unsigned long max, 
 	int end, uint32_t flags);
 
+extern struct mem_shdr *elf_rel_find_section(const struct mem_ehdr *ehdr,
+					     const char *name);
 extern int elf_rel_find_symbol(struct mem_ehdr *ehdr,
 	const char *name, struct mem_sym *ret_sym);
 extern unsigned long elf_rel_get_addr(struct mem_ehdr *ehdr, const char *name);
