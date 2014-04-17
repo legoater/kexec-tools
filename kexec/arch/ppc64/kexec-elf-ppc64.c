@@ -97,7 +97,6 @@ int elf_ppc64_load(int argc, char **argv, const char *buf, off_t len,
 	struct mem_ehdr ehdr;
 	char *cmdline, *modified_cmdline = NULL;
 	const char *devicetreeblob;
-	int cmdline_len, modified_cmdline_len;
 	uint64_t max_addr, hole_addr;
 	char *seg_buf = NULL;
 	off_t seg_size = 0;
@@ -164,10 +163,7 @@ int elf_ppc64_load(int argc, char **argv, const char *buf, off_t len,
 		}
 	}
 
-	cmdline_len = 0;
-	if (cmdline)
-		cmdline_len = strlen(cmdline) + 1;
-	else
+	if (!cmdline)
 		fprintf(stdout, "Warning: append= option is not passed. Using the first kernel root partition\n");
 
 	if (ramdisk && reuse_initrd)
@@ -183,7 +179,6 @@ int elf_ppc64_load(int argc, char **argv, const char *buf, off_t len,
 			strncpy(modified_cmdline, cmdline, COMMAND_LINE_SIZE);
 			modified_cmdline[COMMAND_LINE_SIZE - 1] = '\0';
 		}
-		modified_cmdline_len = strlen(modified_cmdline);
 	}
 
 retry:
@@ -234,7 +229,6 @@ retry:
 			return -1;
 		/* Use new command line. */
 		cmdline = modified_cmdline;
-		cmdline_len = strlen(modified_cmdline) + 1;
 	}
 
 	/* Add v2wrap to the current image */
