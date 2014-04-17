@@ -33,6 +33,7 @@
 #include "kexec-ppc64.h"
 #include "crashdump-ppc64.h"
 #include <arch/options.h>
+#include "../../fs2dt.h"
 
 static struct memory_range *exclude_range = NULL;
 static struct memory_range *memory_range = NULL;

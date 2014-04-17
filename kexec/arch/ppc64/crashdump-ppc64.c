@@ -34,6 +34,7 @@
 #include "../../crashdump.h"
 #include "kexec-ppc64.h"
 #include "crashdump-ppc64.h"
+#include "../../fs2dt.h"
 
 static struct crash_elf_info elf_info64 =
 {
