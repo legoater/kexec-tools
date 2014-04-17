@@ -37,4 +37,6 @@ typedef struct mem_rgns {
 
 extern mem_rgns_t usablemem_rgns;
 
+int zImage_ppc64_unzip(struct mem_ehdr *ehdr, void **buf, int *len);
+
 #endif /* KEXEC_PPC64_H */

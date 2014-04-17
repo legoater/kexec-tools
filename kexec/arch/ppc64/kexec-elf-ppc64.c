@@ -116,6 +116,8 @@ int elf_ppc64_load(int argc, char **argv, const char *buf, off_t len,
 	uint64_t toc_addr;
 	uint32_t my_run_at_load;
 	unsigned int slave_code[256/sizeof (unsigned int)], master_entry;
+	void *vmlinux_addr;
+	int vmlinux_size;
 
 	/* See options.h -- add any more there, too. */
 	static const struct option options[] = {
@@ -184,11 +186,24 @@ int elf_ppc64_load(int argc, char **argv, const char *buf, off_t len,
 		modified_cmdline_len = strlen(modified_cmdline);
 	}
 
+retry:
 	/* Parse the Elf file */
 	result = build_elf_exec_info(buf, len, &ehdr, 0);
 	if (result < 0) {
 		free_elf_info(&ehdr);
 		return result;
+	}
+
+	/* If this is a zimage boot wrapper, rebuild the elf info on
+	 * the new vmlinux which has been unzipped and go on with the
+	 * kernel load.
+	 */
+	if (!zImage_ppc64_unzip(&ehdr, &vmlinux_addr, &vmlinux_size)) {
+		free_elf_info(&ehdr);
+		free((void *) buf);
+		buf = vmlinux_addr;
+		len = vmlinux_size;
+		goto retry;
 	}
 
 	/* Load the Elf data. Physical load addresses in elf64 header do not
